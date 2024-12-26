@@ -1,15 +1,161 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+/*Задача 1. Игра-шутер
+        Описание
+Один из проектов — это игра-шутер (Half-Life 3, только никому ни слова). У игрока должна быть возможность использовать разные виды оружия, в будущем в игру могут быть добавлены новые. Необходимо спроектировать иерархию классов, а также систему слотов для оружия у игрока.
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+        Функционал программы
+Создание объекта Player у которого будет набор оружия;
+Возможность у игрока вызвать метод выстрела, внутри которого будут проверки на допустимость номера оружия для выстрела;
+Классы оружия должны быть в пакете weapon (вспомните какие ДВЕ вещи нужно сделать, чтобы поместить классы в пакеты; мы их проходили на втором занятии);
+Возможность выбора оружия для выстрела в main.
+        Процесс реализации
+Создадим класс игрока и функцию main.
+Класс Player содержит список оружия и метод "выстрелить"
+class Player {
+    // Указываем тип данных Weapon, который будет храниться в "слотах игрока"
+    private Weapon[] weaponSlots;
+
+    public Player() {
+        // Снаряжаем нашего игрока
+        weaponSlots = new Weapon[] {
+                // TODO заполнить слоты оружием
+                // new BigGun(),
+                // new WaterPistol()
+        };
+    }
+
+    public int getSlotsCount() {
+        // length - позволяет узнать, сколько всего слотов с оружием у игрока
+        return weaponSlots.length;
+    }
+
+    public void shotWithWeapon(int slot) {
+        // TODO проверить на выход за границы
+        // если значение slot некорректно, то
+        // выйти из метода написав об этом в консоль
+
+        // Получаем оружие из выбранного слота
+        Weapon weapon = weaponSlots[slot];
+        // Огонь!
+        weapon.shot();
+    }
+}
+Метод main
+public static void main(String[] args) {
+    Scanner scanner = new Scanner(System.in);
+    Player player = new Player();
+    // Как настоящие программисты мы имеем в виду, что исчисление начинается с 0
+    System.out.format("У игрока %d слотов с оружием,"
+                    + " введите номер, чтобы выстрелить,"
+                    + " -1 чтобы выйти%n",
+            player.getSlotsCount()
+    );
+    int slot;
+
+    // TODO главный цикл игры:
+    // запрашивать номер с клавиатуры
+    // с помощью scanner.nextInt(),
+    // пока не будет введено -1
+
+    System.out.println("Game over!");
+}
+Создадим классы для некоторых видов оружия.
+Базовый класс для всех видов оружия
+class Weapon {
+    public void shot() {
+        // TODO override me!
+    }
+}
+Как "заставить" дочерний класс переопределить поведение некоторых методов базового класса, мы узнаем на следующей лекции.
+
+Создадим дочерние классы:
+
+Пистолет;
+Автомат;
+РПГ;
+Рогатка;
+Водный пистолет.
+В каждом из дочерних классов переопределите метод shot(), чтобы он изменил поведение оружия в соответствии с его типом. Например, чтобы оно выводило в консоль соответствующие выстрелу звуки: Пив-Пав!.
+
+Теперь можно вернуться к классу Player и создать по экземпляру каждого оружия.
+Не забудьте разграничить классы по типу с помощью пакетов, например, все классы с оружием можно вынести в package weapon.
+*/
+
+
+import player.Player;
+
+import java.util.Scanner;
+
+public class Main {
+    public static int input;
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Player player = new Player();
+        // Как настоящие программисты мы имеем в виду, что исчисление начинается с 0
+        System.out.format("У игрока %d слотов с оружием,"
+                        + " введите номер, чтобы выстрелить,"
+                        + " -1 чтобы выйти%n",
+                player.getSlotsCount()
+        );
+        int slot;
+
+        // TODO главный цикл игры:
+
+        // запрашивать номер с клавиатуры
+        while (true) {
+            System.out.println("""
+                                   
+                    Введите опреацию:
+                    1 - взять пистолет
+                    2 - взять автомат
+                    3 - взять РПГ
+                    4 - взять рогатку
+                    5 - взять водный пистолет
+                    -1 -выход
+                    """);
+
+            input = scanner.nextInt();
+            if (input == -1) {
+                System.out.println("Game over!");
+                break;
+            }
+
+
+            switch (input) {
+                case 1:
+
+                    player.shotWithWeapon(0);
+
+                    break;
+
+                case 2:
+                    player.shotWithWeapon(1);
+
+
+                    break;
+                case 3:
+                    player.shotWithWeapon(2);
+
+                    break;
+                case 4:
+                    player.shotWithWeapon(3);
+
+                    break;
+                case 5:
+                    player.shotWithWeapon(4);
+
+                    break;
+
+                default:
+                    System.out.println("Такого оружия нет!");
+            }
+
         }
+
+
+        // с помощью scanner.nextInt(),
+        // пока не будет введено -1
+
+
     }
 }
